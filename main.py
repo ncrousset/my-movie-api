@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 
 app = FastAPI()
 app.title = "My movie API"
@@ -34,9 +34,32 @@ def get_movie(movie_id: int):
     return []
 
 @app.get("/movies/", tags=["movies"])
-def get_movie_by_year(year: int):
+def get_movies_by_year(year: int):
     movie_list = []
     for movie in movies:
         if(movie["year"] == year):
             movie_list.append(movie)
     return movie_list
+
+@app.post("/movies", tags=["movies"])
+def add_movie(id: int = Body(), name: str = Body(), year: int = Body(), rating: float = Body()):
+    movies.append({"id": id, "name": name, "year": year, "rating": rating})
+    return movies
+
+@app.put("/movies/{movie_id}", tags=["movies"])
+def update_movie(movie_id: int, name: str = Body(), year: int = Body(), rating: float = Body()):
+    for movie in movies:
+        if(movie["id"] == movie_id):
+            movie["name"] = name
+            movie["year"] = year
+            movie["rating"] = rating
+            return movie
+    return []
+
+@app.delete("/movies/{movie_id}", tags=["movies"])
+def delete_movie(movie_id: int):
+    for movie in movies:
+        if(movie["id"] == movie_id):
+            movies.remove(movie)
+            return movies
+    return []
