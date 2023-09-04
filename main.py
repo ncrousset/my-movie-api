@@ -1,12 +1,23 @@
-from fastapi import FastAPI, Body, Path, Query
+from fastapi import FastAPI, Body, Path, Query, Request, Depends, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.security.http import HTTPAuthorizationCredentials
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Any, Coroutine, Optional, List
 
+from starlette.requests import Request
+from jwt_manager import create_token, validate_token
+from fastapi.security import HTTPBearer
 
 app = FastAPI()
 app.title = "My movie API"
 app.version = "0.0.1"
+
+class JWTBearer(HTTPBearer):
+    async def __call__(self, request: Request):
+        auth = await super().__call__(request)
+        data = validate_token(auth.credentials)
+        if data['email'] != "admin@email.com" and data['password'] != "admin":
+            raise HTTPException(status_code=403, detail="Invalid username or password")    
 
 class Movie(BaseModel):
     id: int
@@ -27,6 +38,17 @@ class Movie(BaseModel):
     def __str__(self):
         return f"{self.id} - {self.name} - {self.year} - {self.rating}"
     
+class User(BaseModel):
+    email: str
+    password: str
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "password": "password",
+                "email": "johndoe@mail.com"
+            }
+        }
 
 movies = [
     {"id": 1,"name": "The Godfather", "year": 1972, "category": "Crimen/Drama", "rating": 9.2},
@@ -38,7 +60,14 @@ movies = [
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200)
+@app.post("/login", tags=["auth"])
+def login(user: User):
+    if user.email == "admin@gmail.com" and user.password == "admin":
+        token = create_token(vars(user))
+        return JSONResponse(status_code=200, content={"token": token})
+    return JSONResponse(status_code=401, content={"message": "Unauthorized"})
+
+@app.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200, dependencies=[Depends(JWTBearer())])
 def get_movies() -> List[Movie]:
     return JSONResponse(status_code=200, content=movies)
 
