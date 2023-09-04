@@ -1,8 +1,15 @@
 from fastapi import FastAPI, Body
+from pydantic import BaseModel
 
 app = FastAPI()
 app.title = "My movie API"
 app.version = "0.0.1"
+
+class Movie(BaseModel):
+    id: int
+    name: str
+    year: int
+    rating: float
 
 movies = [
     {"id": 1,"name": "The Godfather", "year": 1972, "rating": 9.2},
@@ -42,17 +49,17 @@ def get_movies_by_year(year: int):
     return movie_list
 
 @app.post("/movies", tags=["movies"])
-def add_movie(id: int = Body(), name: str = Body(), year: int = Body(), rating: float = Body()):
-    movies.append({"id": id, "name": name, "year": year, "rating": rating})
+def add_movie(movie: Movie):
+    movies.append(movie)
     return movies
 
 @app.put("/movies/{movie_id}", tags=["movies"])
-def update_movie(movie_id: int, name: str = Body(), year: int = Body(), rating: float = Body()):
+def update_movie(movie_id: int, movie: Movie):
     for movie in movies:
         if(movie["id"] == movie_id):
-            movie["name"] = name
-            movie["year"] = year
-            movie["rating"] = rating
+            movie["name"] = movie.name
+            movie["year"] = movie.year
+            movie["rating"] = movie.rating
             return movie
     return []
 
