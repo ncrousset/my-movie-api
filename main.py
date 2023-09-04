@@ -47,7 +47,7 @@ def get_movie(movie_id: int = Path(ge=1)) -> Movie:
     for movie in movies:
         if(movie["id"] == movie_id):
             return JSONResponse(status_code=200, content=movie)
-    return JSONResponse(content=[])
+    return JSONResponse(status_code=404, content=[])
 
 @app.get("/movies/category", tags=["movies"], response_model=List[Movie], status_code=200)
 def get_movies_by_category(category: str = Query(None, min_length=3, max_length=50)) -> List[Movie]:
@@ -77,8 +77,8 @@ def update_movie(movie_id: int, movie: Movie):
             movie["name"] = movie.name
             movie["year"] = movie.year
             movie["rating"] = movie.rating
-            return JSONResponse(content=movie)
-    return JSONResponse(status_code=200, content=[])
+            return JSONResponse(status_code=200, content=movie)
+    return JSONResponse(status_code=404, content=[])
 
 @app.delete("/movies/{movie_id}", tags=["movies"], status_code=200)
 def delete_movie(movie_id: int):
@@ -86,4 +86,4 @@ def delete_movie(movie_id: int):
         if(movie["id"] == movie_id):
             movies.remove(movie)
             return JSONResponse(status_code=200, content=movies)
-    return JSONResponse(status_code=200, content={})
+    return JSONResponse(status_code=404, content={})
