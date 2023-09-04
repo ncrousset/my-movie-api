@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Body
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 app = FastAPI()
 app.title = "My movie API"
@@ -7,9 +7,19 @@ app.version = "0.0.1"
 
 class Movie(BaseModel):
     id: int
-    name: str
-    year: int
-    rating: float
+    name: str = Field(..., max_length=50)
+    year: int = Field(..., gt=1900, lt=2100)
+    rating: float = Field(...,le=10, ge=0)
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "name": "The Godfather",
+                "year": 1972,
+                "rating": 9.2
+            }
+        }
 
 movies = [
     {"id": 1,"name": "The Godfather", "year": 1972, "rating": 9.2},
