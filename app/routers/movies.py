@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from typing import List
 from app.models.movie import Movie
+from app.utils.authentication import JWTBearer
 
 movies = [
     {"id": 1,"name": "The Godfather", "year": 1972, "category": "Crimen/Drama", "rating": 9.2},
@@ -11,6 +12,6 @@ movies = [
 
 router = APIRouter()
 
-@router.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200)
+@router.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200, dependencies=[Depends(JWTBearer())])
 def get_movies() -> List[Movie]:
     return JSONResponse(status_code=200, content=movies)
