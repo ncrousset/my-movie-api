@@ -1,5 +1,8 @@
 from fastapi import FastAPI, Body, Path, Query
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
+from typing import Optional, List
+
 
 app = FastAPI()
 app.title = "My movie API"
@@ -14,11 +17,16 @@ class Movie(BaseModel):
     class Config:
         json_schema_extra = {
             "example": {
+                "id": 1,
                 "name": "The Godfather",
                 "year": 1972,
                 "rating": 9.2
             }
         }
+
+    def __str__(self):
+        return f"{self.id} - {self.name} - {self.year} - {self.rating}"
+    
 
 movies = [
     {"id": 1,"name": "The Godfather", "year": 1972, "category": "Crimen/Drama", "rating": 9.2},
@@ -30,37 +38,37 @@ movies = [
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/movies", tags=["movies"])
-def get_movies():
-    return movies
+@app.get("/movies", tags=["movies"], response_model=List[Movie])
+def get_movies() -> List[Movie]:
+    return JSONResponse(content=movies)
 
-@app.get("/movies/{movie_id}", tags=["movies"])
-def get_movie(movie_id: int = Path(ge=1)):
+@app.get("/movies/{movie_id}", tags=["movies"], response_model=Movie)
+def get_movie(movie_id: int = Path(ge=1)) -> Movie:
     for movie in movies:
         if(movie["id"] == movie_id):
-            return movie
-    return []
+            return JSONResponse(content=movie)
+    return JSONResponse(content=[])
 
-@app.get("/movies/", tags=["movies"])
-def get_movies_by_category(category: str = Query(None, min_length=3, max_length=50)):
+@app.get("/movies/category", tags=["movies"], response_model=List[Movie])
+def get_movies_by_category(category: str = Query(None, min_length=3, max_length=50)) -> List[Movie]:
     movie_list = []
     for movie in movies:
         if(movie["category"] == category):
             movie_list.append(movie)
-    return movie_list       
+    return JSONResponse(content=movie_list)       
 
-@app.get("/movies/", tags=["movies"])
-def get_movies_by_year(year: int = Path(le=2100, gt=1900)):
+@app.get("/movies/", tags=["movies"], response_model=List[Movie])
+def get_movies_by_year(year: int = Path(le=2100, gt=1900)) -> List[Movie]:
     movie_list = []
     for movie in movies:
         if(movie["year"] == year):
             movie_list.append(movie)
-    return movie_list
+    return JSONResponse(content=movie_list)
 
 @app.post("/movies", tags=["movies"])
 def add_movie(movie: Movie):
     movies.append(movie)
-    return movies
+    return JSONResponse(content={"message": "Movie added successfully"})
 
 @app.put("/movies/{movie_id}", tags=["movies"])
 def update_movie(movie_id: int, movie: Movie):
@@ -69,14 +77,13 @@ def update_movie(movie_id: int, movie: Movie):
             movie["name"] = movie.name
             movie["year"] = movie.year
             movie["rating"] = movie.rating
-            return movie
-    return []
+            return JSONResponse(content=movie)
+    return JSONResponse(content=[])
 
 @app.delete("/movies/{movie_id}", tags=["movies"])
 def delete_movie(movie_id: int):
     for movie in movies:
         if(movie["id"] == movie_id):
             movies.remove(movie)
-            return movies
-    return []
-
+            return JSONResponse(content=movies)
+    return JSONResponse(content={})
