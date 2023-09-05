@@ -6,7 +6,6 @@ from app.models.movie import Movie as MovieModel, Pato as Movie
 from app.utils.authentication import JWTBearer
 from config.database import Session 
 
-
 router = APIRouter()
 
 @router.get("/movies", tags=["movies"], response_model=Movie, status_code=200, dependencies=[Depends(JWTBearer())])
@@ -48,21 +47,25 @@ def add_movie(movie: Movie):
     db.commit()
     return JSONResponse(status_code=201, content={"message": "Movie added successfully"})
 
-# @router.put("/movies/{movie_id}", tags=["movies"], status_code=200, dependencies=[Depends(JWTBearer())])
-# def update_movie(movie_id: int, movie: Movie):
-#     for movie in movies:
-#         if(movie["id"] == movie_id):
-#             movie["name"] = movie.name
-#             movie["year"] = movie.year
-#             movie["category"] = movie.category
-#             movie["rating"] = movie.rating
-#             return JSONResponse(status_code=200, content={"message": "Movie updated successfully"})
-#     return JSONResponse(status_code=404, content=[])
-
-# @router.delete("/movies/{movie_id}", tags=["movies"], status_code=200)
-# def delete_movie(movie_id: int):
-#     for movie in movies:
-#         if(movie["id"] == movie_id):
-#             movies.remove(movie)
-#             return JSONResponse(status_code=200, content=movies)
-#     return JSONResponse(status_code=404, content={})
+@router.put("/movies/{movie_id}", tags=["movies"], status_code=200, dependencies=[Depends(JWTBearer())])
+def update_movie(movie_id: int, movie: Movie):
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.id == movie_id).first()
+    if not result:
+        return JSONResponse(status_code=404, content={"message": "Movie not found"}) 
+    result.name = movie.name
+    result.year = movie.year
+    result.category = movie.category
+    result.rating = movie.rating
+    db.commit()
+    return JSONResponse(status_code=200, content={"message": "Movie updated successfully"})
+    
+@router.delete("/movies/{movie_id}", tags=["movies"], status_code=200, dependencies=[Depends(JWTBearer())] )
+def delete_movie(movie_id: int):
+    db = Session()
+    result = db.query(MovieModel).filter(MovieModel.id == movie_id).first()
+    if not result:
+        return JSONResponse(status_code=404, content={"message": "Movie not found"})
+    db.delete(result)
+    db.commit()
+    return JSONResponse(status_code=200, content={"message": "Movie deleted successfully"}) 
