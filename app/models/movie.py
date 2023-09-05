@@ -1,6 +1,6 @@
 from config.database import Base
 from sqlalchemy import Column, Integer, String, Float
-
+from typing import Optional
 from pydantic import BaseModel, Field
 
 class Movie(Base):
@@ -14,8 +14,8 @@ class Movie(Base):
     def __str__(self):
         return f"{self.id} - {self.name} - {self.year} - {self.category} - {self.rating}"
 
-class MovieA(BaseModel):
-    id: int
+class Pato(BaseModel):
+    id: Optional[int] = None 
     name: str = Field(..., max_length=50)
     year: int = Field(..., gt=1900, lt=2100)
     category: str = Field(..., max_length=100, min_length=3)
