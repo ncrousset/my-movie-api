@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from typing import List
 from app.models.movie import Movie as MovieModel, Pato as Movie 
-from app.utils.authentication import JWTBearer
+from app.middlewares.jwt_bearer import JWTBearer
 from config.database import Session 
 
 router = APIRouter()
