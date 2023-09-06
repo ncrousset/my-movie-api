@@ -1,8 +1,6 @@
-from fastapi import FastAPI # Body, Path, Query, Request, Depends, HTTPException
-from app.routers import movies as movies_router
-# from app.routers import auth as auth_router
-from config.database import engine, Session, Base
-from app.models.movie import Movie as MovieModel
+from fastapi import FastAPI 
+from app.routers import movie as movies_router, auth as auth_router
+from config.database import engine, Base
 from app.middlewares.error_handler import ErrorHandler
 
 app = FastAPI()
@@ -13,7 +11,7 @@ app.add_middleware(ErrorHandler)
 
 Base.metadata.create_all(bind=engine)
 
-# app.include_router(auth_router.router)
+app.include_router(auth_router.router)
 app.include_router(movies_router.router)
 
 

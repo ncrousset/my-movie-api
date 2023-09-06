@@ -7,7 +7,7 @@ router = APIRouter()
 
 @router.post("/login", tags=["auth"])
 def login(user: User):
-    if user.email == "admin@gmail.com" and user.password == "admin":
+    if user.email == "admin" and user.password == "admin":
         token = create_token(vars(user))
         return JSONResponse(status_code=200, content={"token": token})
     return JSONResponse(status_code=401, content={"message": "Unauthorized"})
