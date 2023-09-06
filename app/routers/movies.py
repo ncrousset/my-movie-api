@@ -22,7 +22,7 @@ def get_movie(movie_id: int = Path(ge=1)) -> Movie:
         return JSONResponse(status_code=404, content={"message": "Movie not found"})
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@router.get("/movies/", tags=["movies"], response_model=List[Movie], status_code=200)
+@router.get("/movies/", tags=["movies"], response_model=List[Movie], status_code=200, dependencies=[Depends(JWTBearer())])
 def get_movies_by_category(category: str = Query(None, min_length=3, max_length=50)) -> List[Movie]:
     db = Session()
     movies = db.query(MovieModel).filter(MovieModel.category.like(f"%{category}%")).all()
@@ -60,7 +60,7 @@ def update_movie(movie_id: int, movie: Movie):
     db.commit()
     return JSONResponse(status_code=200, content={"message": "Movie updated successfully"})
     
-@router.delete("/movies/{movie_id}", tags=["movies"], status_code=200, dependencies=[Depends(JWTBearer())] )
+@router.delete("/movies/{movie_id}", tags=["movies"], status_code=200, dependencies=[Depends(JWTBearer())])
 def delete_movie(movie_id: int):
     db = Session()
     result = db.query(MovieModel).filter(MovieModel.id == movie_id).first()
