@@ -1,13 +1,11 @@
-from pydantic import BaseModel, Field
+from config.database import Base
+from sqlalchemy import Column, Integer, String
 
-class User(BaseModel):
-    email: str
-    password: str
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String(100), nullable=False)
+    password = Column(String(25), nullable=False)
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "password": "password",
-                "email": ""
-            }
-        }
+    def __str__(self):
+        return f"{self.id} - {self.email} - {self.password}"

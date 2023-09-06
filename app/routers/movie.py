@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, Path, Query
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from typing import List
-from app.models.movie import Movie as MovieModel, Pato as Movie 
 from app.middlewares.jwt_bearer import JWTBearer
 from config.database import Session 
 from app.services.movie import MovieService
+from app.schemas.movie import Movie
 
 router = APIRouter()
 

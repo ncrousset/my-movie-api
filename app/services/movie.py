@@ -1,4 +1,4 @@
-from app.models.movie import Movie as MovieModel, Pato as Movie 
+from app.models.movie import Movie as MovieModel
 
 class MovieService():
     def __init__(self, db) -> None:
