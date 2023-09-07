@@ -5,6 +5,7 @@ from config.database import Session
 from app.services.user import UserService  
 from app.schemas.user import User
 from app.utils.jwt_manager import create_token
+from email_validator import validate_email, EmailNotValidError
 
 
 router = APIRouter()
@@ -17,6 +18,9 @@ def get_user(user_id: int = Path(ge=1)) -> User:
 
 @router.post("/user", tags=["user"])
 def register_user(user: User):
+    if validate_email(user.email) == False:
+        return JSONResponse(status_code=400, content={"message": "Invalid email"})
+
     db = Session()
     result = UserService(db).register_user(user)
     if not result:

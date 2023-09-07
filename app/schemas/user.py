@@ -8,6 +8,6 @@ class User(BaseModel):
         json_schema_extra = {
             "example": {
                 "password": "password",
-                "email": ""
+                "email": "ncrousset926@gmail.com"
             }
         }
