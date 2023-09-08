@@ -15,6 +15,10 @@ app.include_router(auth_router.router)
 app.include_router(movies_router.router)
 app.include_router(user_router.router)
 
+
+
+
+
 # For debugging with breakpoints 
 if __name__ == '__main__':
     import uvicorn
