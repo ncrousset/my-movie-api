@@ -4,3 +4,4 @@ __pycache__
 database.sqlite
 app.log
 gitlog
+.idea
