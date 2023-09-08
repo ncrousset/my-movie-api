@@ -1,6 +1,6 @@
 venv
 __pycache__
 *__pycache__*
-database.sqlite3
+database.sqlite
 app.log
 gitlog

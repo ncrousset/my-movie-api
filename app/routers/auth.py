@@ -4,6 +4,7 @@ from app.schemas.user import User
 from app.utils.jwt_manager import create_token
 from app.services.user import UserService
 from config.database import Session
+import uvicorn
 
 router = APIRouter()
 

@@ -15,7 +15,7 @@ app.include_router(auth_router.router)
 app.include_router(movies_router.router)
 app.include_router(user_router.router)
 
-
-# @app.get("/", tags=["home"])
-# def read_root():
-#     return {"Hello": "World"}
+# For debugging with breakpoints 
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
