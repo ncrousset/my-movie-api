@@ -6,14 +6,14 @@ from typing import Optional, List
 from config.database import Session
 # from models.movie import Movie as MovieModel
 from fastapi.encoders import jsonable_encoder
-# from middlewares.jwt_bearer import JWTBearer
+from app.middlewares.jwt_bearer import JWTBearer
 from app.services.movie import MovieService
 from app.schemas.movie import Movie
 
 router = APIRouter()
 
 
-@router.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200) 
+@router.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200, dependencies=[Depends(JWTBearer())]) 
 def get_movies() -> List[Movie]:
     db = Session()
     result = MovieService(db).get_movies()

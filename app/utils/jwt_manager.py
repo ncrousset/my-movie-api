@@ -6,7 +6,7 @@ def create_token(data: dict):
 
 def validate_token(token: str)-> dict:
     try:
-        decoded_token: dict = decode(token, key='secret', algorithms='HS256')
-        return decoded_token if decoded_token else None
+        decoded_token: dict = decode(token, key='secret', algorithms='HS256') 
+        return decoded_token
     except:
         return None
