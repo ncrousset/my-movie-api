@@ -13,11 +13,3 @@ def create_jwt_token(user: User, expires_in_minutes: int = 60):
 def get_jwt_token(user, expires_in_minutes: int = 60):
     token = create_jwt_token(user, expires_in_minutes)
     return token
-
-def create_fake_movie():
-    return {
-        "title": "Test Movie",
-        "description": "Test Description",
-        "genre": "Test Genre",
-        "owner": 1
-    }
