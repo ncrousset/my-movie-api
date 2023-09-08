@@ -12,20 +12,19 @@ from app.schemas.movie import Movie
 
 router = APIRouter()
 
-
 @router.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200, dependencies=[Depends(JWTBearer())]) 
 def get_movies() -> List[Movie]:
     db = Session()
     result = MovieService(db).get_movies()
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@router.get("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200)    
+@router.get("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200, dependencies=[Depends(JWTBearer())])
 def get_movie(movie_id: int) -> Movie:
     db = Session()
     result = MovieService(db).get_movie(movie_id)
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@router.get("/movies/", tags=["movies"], response_model=List[Movie], status_code=200)
+@router.get("/movies/", tags=["movies"], response_model=List[Movie], status_code=200, dependencies=[Depends(JWTBearer())])
 def get_movies_by_category(category: str = Query(None, min_length=3, max_length=50)) -> List[Movie]:
     db = Session()
     movies = MovieService(db).get_movies_by_category(category)
@@ -33,19 +32,19 @@ def get_movies_by_category(category: str = Query(None, min_length=3, max_length=
         return JSONResponse(status_code=404, content={"message": "Movie not found"})
     return JSONResponse(status_code=200, content=jsonable_encoder(movies))
 
-@router.post("/movie", tags=["movies"], response_model=Movie, status_code=201)  
+@router.post("/movie", tags=["movies"], response_model=Movie, status_code=201, dependencies=[Depends(JWTBearer())])
 def create_movie(movie: Movie) -> Movie:
     db = Session()
     result = MovieService(db).create_movie(movie)
     return JSONResponse(status_code=201, content=jsonable_encoder(result))
 
-@router.put("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200)
+@router.put("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200, dependencies=[Depends(JWTBearer())])
 def update_movie(movie_id: int, movie: Movie) -> Movie:
     db = Session()
     result = MovieService(db).update_movie(movie_id, movie)
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@router.delete("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200)
+@router.delete("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200, dependencies=[Depends(JWTBearer())])
 def delete_movie(movie_id: int) -> Movie:
     db = Session()
     result = MovieService(db).delete_movie(movie_id)
