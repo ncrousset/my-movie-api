@@ -49,3 +49,15 @@ def test_get_movie(client, get_token):
     response = client.get('/movie/1', headers=headers)
     assert response.status_code == 200
     assert response.json()['title'] == post_data['title']
+
+def test_get_movies_by_category(client, get_token):
+    """Test retrieving movies by category with authentication using a JWT token.
+
+    Verifies that a GET request to '/movies/?category=Crime' with an authenticated
+    user's JWT token returns a status code of 200 (OK) and checks that the title of
+    the first movie in the response matches the expected title.
+    """
+    headers = {"Authorization": "Bearer " + get_token}
+    response = client.get("/movies/?category=Crime", headers=headers)
+    assert response.status_code == 200
+    assert response.json()[0]['title'] == post_data['title']
