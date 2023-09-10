@@ -12,9 +12,9 @@ def test_get_user(client, get_token):
 
 def test_get_user_unauthenticated(client):
     response = client.get(
-        "/user/30000"
+        "/user/1"
     )
 
-    assert response.status_code == 404
-    assert response.json()["message"] == "User not found"
+    assert response.status_code == 403
+    assert response.json()["detail"] == "Not authenticated"
 
