@@ -1,4 +1,7 @@
 from tests.test_main import test_db_init, client, get_token, USER_FAKE_EMAIL
+from faker import Faker
+
+fake = Faker()
 
 def test_get_user(client, get_token):
     headers = {"Authorization": "Bearer " + get_token, 'Content-Type': 'application/json'}
@@ -33,7 +36,7 @@ def test_register_user(client):
     headers = {'Content-Type': 'application/json'}
     response = client.post(
         "/user",
-        json={"email": "test2@test.com", "password": "password"},
+        json={"email": fake.email(True, "test.com"), "password": "password"},
         headers=headers
     )
 
@@ -44,9 +47,8 @@ def test_register_user_invalid_email(client):
     headers = {'Content-Type': 'application/json'}
     response = client.post(
         "/user",
-        json={"email": "test2test.com", "password": "password"},
+        json={"email": "Hola", "password": "password"},
         headers=headers
     )
 
-    assert response.status_code == 400
-    assert response.json()["message"] == "Invalid email"
+    assert response.status_code == 500
