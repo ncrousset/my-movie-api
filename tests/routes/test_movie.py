@@ -1,8 +1,4 @@
-import pytest
-from tests.test_main import test_db, client, create_user, get_token
-from app.models.user import User as UserModel
-import json
-
+from tests.test_main import test_db_init, client, get_token
 
 post_data = {
         "title": "The Godfather",
@@ -77,7 +73,6 @@ def test_get_movies_unauthenticated(client):
     response = client.get('/movies')
     assert response.status_code == 403
 
-
 def test_get_movie(client, get_token):
     """
     Test retrieving a movie by its ID using authentication with a JWT token.
@@ -87,9 +82,9 @@ def test_get_movie(client, get_token):
     matches the expected title.
     """
     headers = {"Authorization": "Bearer " + get_token}
-    response = client.get('/movie/3', headers=headers)
+    response = client.get('/movie/1', headers=headers)
     assert response.status_code == 200
-    assert response.json()['id'] == 3
+    assert response.json()['id'] == 1
 
 def test_get_movie_unauthenticated(client):
     """
@@ -163,9 +158,26 @@ def test_update_movie_invalid_data(client, get_token):
     assert response.status_code == 422
 
 def test_delete_movie(client, get_token):
+    """Test deleting a movie with authentication using a JWT token.
+
+    Sends a DELETE request to '/movie/1' with an authenticated user's JWT token.
+    """
     headers = {"Authorization": "Bearer " + get_token, 'Content-Type': 'application/json'}
     response = client.delete(
         "/movie/2",
         headers=headers
     )
     assert response.status_code == 200
+
+def test_delete_movie_unauthenticated(client):
+    """Test deleting a movie without authentication.
+
+    Sends a DELETE request to '/movie/1' without an authenticated user's JWT token.
+    Verifies that the response status code is 401 (Unauthorized).
+    """
+    headers = {'Content-Type': 'application/json'}
+    response = client.delete(
+        "/movie/2",
+        headers=headers
+    )
+    assert response.status_code == 403

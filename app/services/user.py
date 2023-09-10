@@ -4,6 +4,10 @@ class UserService():
     def __init__(self, db) -> None:
         self.db = db
 
+    def get_users(self):
+        result = self.db.query(UserModel).all()
+        return result
+
     def get_user_by_id(self, id):
         result = self.db.query(UserModel).filter(UserModel.id == id).first()
         return result
