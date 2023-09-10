@@ -18,3 +18,35 @@ def test_get_user_unauthenticated(client):
     assert response.status_code == 403
     assert response.json()["detail"] == "Not authenticated"
 
+
+def test_get_user_not_found(client, get_token):
+    headers = {"Authorization": "Bearer " + get_token, 'Content-Type': 'application/json'}
+    response = client.get(
+        "/user/3000",
+        headers=headers
+    )
+
+    assert response.status_code == 404
+    assert response.json()["message"] == "User not found"
+
+def test_register_user(client):
+    headers = {'Content-Type': 'application/json'}
+    response = client.post(
+        "/user",
+        json={"email": "test2@test.com", "password": "password"},
+        headers=headers
+    )
+
+    assert response.status_code == 201
+    assert response.json()["token"] is not None
+
+def test_register_user_invalid_email(client):
+    headers = {'Content-Type': 'application/json'}
+    response = client.post(
+        "/user",
+        json={"email": "test2test.com", "password": "password"},
+        headers=headers
+    )
+
+    assert response.status_code == 400
+    assert response.json()["message"] == "Invalid email"
