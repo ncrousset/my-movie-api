@@ -14,6 +14,10 @@ router = APIRouter()
 def get_user(user_id: int = Path(ge=1)) -> User:
     db = Session()
     result = UserService(db).get_user_by_id(user_id)
+
+    if not result:
+        return JSONResponse(status_code=404, content={"message": "User not found"})
+
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
 @router.post("/user", tags=["user"])
