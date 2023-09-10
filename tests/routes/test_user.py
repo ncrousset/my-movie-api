@@ -52,3 +52,14 @@ def test_register_user_invalid_email(client):
     )
 
     assert response.status_code == 500
+
+def test_register_user_already_exists(client, test_db_init):
+    headers = {'Content-Type': 'application/json'}
+    response = client.post(
+        "/user",
+        json={"email": USER_FAKE_EMAIL, "password": "password"},
+        headers=headers
+    )
+
+    assert response.status_code == 400
+    assert response.json()["message"] == "User already exists"
