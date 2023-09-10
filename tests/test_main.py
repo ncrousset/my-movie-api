@@ -27,13 +27,6 @@ def client(test_db_init):
     return TestClient(app)
 
 
-# def create_user(test_db):
-#     with Session() as db:
-#         user = UserModel(email="test@gmail.com", password="password")
-#         db.add(user)
-#     return user
-
-
 @pytest.fixture(scope="session")
 def get_token():
     token = get_jwt_token(UserModel(email=USER_FAKE_EMAIL, id=1))
