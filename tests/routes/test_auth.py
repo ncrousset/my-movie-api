@@ -1,9 +1,9 @@
-from tests.test_main import test_db_init, client, get_token
+from tests.test_main import test_db_init, client, get_token, USER_FAKE_EMAIL, USER_FAKE_PASS
 def test_auth_login(client, test_db_init):
     headers = {'Content-Type': 'application/json'}
     response = client.post(
         "/login",
-        json={"email": "test@test.com", "password": "password"},
+        json={"email": USER_FAKE_EMAIL, "password": USER_FAKE_PASS},
         headers=headers
     )
 

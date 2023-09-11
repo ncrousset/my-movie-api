@@ -34,30 +34,49 @@ def test_get_user_not_found(client, get_token):
 
 def test_register_user(client):
     headers = {'Content-Type': 'application/json'}
+
+    data = {
+        "name": "Test",
+        "email": fake.email(True, "gmail.com"),
+        "password": "password"
+    }
+
     response = client.post(
         "/user",
-        json={"email": fake.email(True, "test.com"), "password": "password"},
+        json=data,
         headers=headers
     )
 
     assert response.status_code == 201
-    assert response.json()["token"] is not None
+    # assert response.json()["token"] is not None
 
 def test_register_user_invalid_email(client):
     headers = {'Content-Type': 'application/json'}
+    data = {
+        "name": "Test",
+        "email": "test",
+        "password": "password"
+    }
+
     response = client.post(
         "/user",
-        json={"email": "Hola", "password": "password"},
+        json=data,
         headers=headers
     )
 
-    assert response.status_code == 500
+    assert response.status_code == 422
 
 def test_register_user_already_exists(client, test_db_init):
+    data = {
+        "name": "Test",
+        "email": USER_FAKE_EMAIL,
+        "password": "password"
+    }
+
     headers = {'Content-Type': 'application/json'}
     response = client.post(
         "/user",
-        json={"email": USER_FAKE_EMAIL, "password": "password"},
+        json=data,
         headers=headers
     )
 

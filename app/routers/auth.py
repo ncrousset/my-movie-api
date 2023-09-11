@@ -1,5 +1,3 @@
-import json
-
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from app.schemas.user import User
@@ -11,7 +9,7 @@ from fastapi.encoders import jsonable_encoder
 router = APIRouter()
 
 @router.post("/login", tags=["auth"])
-def login(user: User):
+def login(user: User.Auth):
     db = Session()
     db_user = UserService(db).get_user_by_email(user.email)
 

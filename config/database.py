@@ -1,6 +1,6 @@
 import os
 from sqlalchemy import create_engine
-from sqlalchemy.orm.session  import sessionmaker
+from sqlalchemy.orm.session import sessionmaker
 from sqlalchemy.orm import DeclarativeBase
 
 enviroment = os.getenv("APP_ENV", "production")
