@@ -24,7 +24,7 @@ class UserService():
         try:
             new_user = UserModel(**vars(user))
             self.db.add(new_user)
-            # self.db.commit()
+            self.db.commit()
         except Exception as e:
             return e
 
