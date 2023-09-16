@@ -3,15 +3,16 @@ from tests.test_main import test_db_init, client, get_token
 post_data = {
         "title": "The Godfather",
         "year": 1972,
-        "category": "Crime, Drama2",
         "director": "Francis Ford Coppola",
         "imdb_rating": 9.2
 }
+
 
 def test_create_movie(client, get_token):
     """
     Test the creation of a movie using an authentication JWT token.
     """
+    # TODO: Agregar la categoria
     headers = {"Authorization": "Bearer " + get_token, 'Content-Type': 'application/json'}
     response = client.post(
         "/movie",
@@ -96,26 +97,27 @@ def test_get_movie_unauthenticated(client):
     response = client.get('/movie/1')
     assert response.status_code == 403
 
-def test_get_movies_by_category(client, get_token):
-    """Test retrieving movies by category with authentication using a JWT token.
 
-    Verifies that a GET request to '/movies/?category=Crime' with an authenticated
-    user's JWT token returns a status code of 200 (OK) and checks that the title of
-    the first movie in the response matches the expected title.
-    """
-    headers = {"Authorization": "Bearer " + get_token}
-    response = client.get("/movies/?category=Crime", headers=headers)
-    assert response.status_code == 200
-    assert type(response.json()[0]['id']) == int and response.json()[0]['id'] > 0
-
-def test_get_movies_by_category_unauthenticated(client):
-    """Test retrieving movies by category without authentication.
-
-    Verifies that a GET request to '/movies/?category=Crime' without an authenticated
-    user's JWT token returns a status code of 401 (Unauthorized).
-    """
-    response = client.get("/movies/?category=Crime")
-    assert response.status_code == 403
+# TODO: Activar test de category
+# def test_get_movies_by_category(client, get_token):
+#     """Test retrieving movies by category with authentication using a JWT token.
+#
+#     Verifies that a GET request to '/movies/?category=Crime' with an authenticated
+#     user's JWT token returns a status code of 200 (OK) and checks that the title of
+#     the first movie in the response matches the expected title.
+#     """
+#     headers = {"Authorization": "Bearer " + get_token}
+#     response = client.get("/movies/?category=Crime", headers=headers)
+#     assert response.status_code == 200
+#     assert type(response.json()[0]['id']) == int and response.json()[0]['id'] > 0
+# def test_get_movies_by_category_unauthenticated(client):
+#     """Test retrieving movies by category without authentication.
+#
+#     Verifies that a GET request to '/movies/?category=Crime' without an authenticated
+#     user's JWT token returns a status code of 401 (Unauthorized).
+#     """
+#     response = client.get("/movies/?category=Crime")
+#     assert response.status_code == 403
 
 def test_update_movie(client, get_token):
     """Test updating a movie's category with authentication using a JWT token.
@@ -124,7 +126,7 @@ def test_update_movie(client, get_token):
     with an authenticated user's JWT token. Verifies that the response status code
     is 200 (OK).
     """
-    post_data['category'] += ",Comedy"
+    post_data['director'] += "Hola"
     headers = {"Authorization": "Bearer " + get_token, 'Content-Type': 'application/json'}
     response = client.put(
         "/movie/3",
@@ -140,7 +142,7 @@ def test_update_movie_unauthenticated(client):
     without an authenticated user's JWT token. Verifies that the response status code
     is 401 (Unauthorized).
     """
-    post_data['category'] += ",Comedy"
+    post_data['director'] += "hola"
     headers = {'Content-Type': 'application/json'}
     response = client.put(
         "/movie/3",

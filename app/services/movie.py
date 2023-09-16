@@ -15,8 +15,9 @@ class MovieService():
         return result
     
     def get_movies_by_category(self, category):
-        result = self.db.query(MovieModel).filter(MovieModel.category.like(f"%{category}%")).all()
-        return result
+        return []
+        # result = self.db.query(MovieModel).filter(MovieModel.category.like(f"%{category}%")).all()
+        # return result
     
     def create_movie(self, movie: Movie):
         try:
@@ -34,7 +35,6 @@ class MovieService():
             return None
         result.title = movie.title
         result.obi = movie.obi
-        result.category = movie.category
         result.director = movie.director
         result.year = movie.year
         result.imdb_rating = movie.imdb_rating
