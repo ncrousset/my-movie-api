@@ -8,3 +8,4 @@ gitlog
 .idea/*
 .pytest_cache
 .pytest_cache/*
+.env
