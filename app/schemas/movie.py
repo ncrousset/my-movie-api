@@ -1,5 +1,7 @@
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel, Field
+from app.schemas.category import Category
+
 
 class Movie(BaseModel):
     id: Optional[int] = None
@@ -10,7 +12,7 @@ class Movie(BaseModel):
     imdb_rating: Optional[float] = Field(None, ge=0.1, le=10)
     image_url: Optional[str] = Field(None, min_length=1, max_length=500)
 
-    # categories: Optional[list] = None
+    categories: List[Category]
 
     class Config:
         json_schema_extra = {
@@ -20,6 +22,10 @@ class Movie(BaseModel):
                 "director": "Francis Ford Coppola",
                 "year": 1972,
                 "imdb_rating": 9.2,
-                "image_url": "https://m.media-amazon.com/images/I/51NpxYy1EGL._AC_.jpg"
+                "image_url": "https://m.media-amazon.com/images/I/51NpxYy1EGL._AC_.jpg",
+                "categories": [
+                    {"id": 1},
+                    {"id": 2}
+                ]
             }
         }

@@ -12,7 +12,8 @@ from app.schemas.movie import Movie
 
 router = APIRouter()
 
-@router.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200, dependencies=[Depends(JWTBearer())]) 
+@router.get("/movies", tags=["movies"], response_model=List[Movie], status_code=200,
+            dependencies=[Depends(JWTBearer())])
 def get_movies() -> List[Movie]:
     db = Session()
     result = MovieService(db).get_movies()
@@ -32,7 +33,8 @@ def get_movies_by_category(category: str = Query(None, min_length=3, max_length=
         return JSONResponse(status_code=404, content={"message": "Movie not found"})
     return JSONResponse(status_code=200, content=jsonable_encoder(movies))
 
-@router.post("/movie", tags=["movies"], response_model=Movie, status_code=201, dependencies=[Depends(JWTBearer())])
+@router.post("/movie", tags=["movies"], response_model=Movie, status_code=201,
+             dependencies=[Depends(JWTBearer())])
 def create_movie(movie: Movie) -> Movie:
     db = Session()
     result = MovieService(db).create_movie(movie)
