@@ -10,6 +10,8 @@ class Movie(BaseModel):
     imdb_rating: Optional[float] = Field(None, ge=0.1, le=10)
     image_url: Optional[str] = Field(None, min_length=1, max_length=500)
 
+    # categories: Optional[list] = None
+
     class Config:
         json_schema_extra = {
             "example": {
