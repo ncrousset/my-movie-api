@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 from config.database import Base
-from app.models.relationship import movies_categories
+from app.models.relationship import movies_categories, user_favorite_movies
 
 
 class Movie(Base):
@@ -17,6 +17,9 @@ class Movie(Base):
 
     categories = relationship("Category", secondary=movies_categories,
                               back_populates="movies")
+    
+    users_favorite = relationship("User", secondary=user_favorite_movies,
+                                    back_populates="movies_facorite")
 
     def __repr__(self):
         return f"<Movie {self.title}>"
