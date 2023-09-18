@@ -33,5 +33,7 @@ categories_movies = [
 user = User(name="admin", email="test@gmail.com", password="123456")
 
 session = Session()
-session.add_all(categories_movies + [user])
-session.commit()
+
+if not session.query(User).filter(User.email == user.email).first():
+    session.add_all(categories_movies + [user])
+    session.commit()

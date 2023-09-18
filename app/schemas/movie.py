@@ -24,8 +24,9 @@ class Movie(BaseModel):
                 "imdb_rating": 9.2,
                 "image_url": "https://m.media-amazon.com/images/I/51NpxYy1EGL._AC_.jpg",
                 "categories": [
-                    {"id": 1},
-                    {"id": 2}
+                    {"id": 1, "name": "Action"},
+                    {"id": 2, "name": "Adventure"},
+                    {"id": 3, "name": "Animation"}
                 ]
             }
         }

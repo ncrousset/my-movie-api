@@ -1,37 +1,18 @@
 import pytest
-from config.database import Base, Session
 from fastapi.testclient import TestClient
 from main import app
-from app.models.user import User as UserModel
 from app.schemas.user import User
-from tests.utils import get_jwt_token
-from app.services.user import UserService
 from app.utils.jwt_manager import create_token
 
+# add user and son information need to run this test
+import populates
 
-USER_FAKE_EMAIL = "test@test.com"
-USER_FAKE_PASS = "password"
-
-@pytest.fixture(scope="session")
-def test_db_init():
-    db = Session()
-    register_user = UserModel(
-        name="Test",
-        email=USER_FAKE_EMAIL,
-        password=USER_FAKE_PASS,
-    )
-
-    user = UserService(db).get_user_by_email(register_user.email)
-
-    if not user:
-        db.add(register_user)
-        db.commit()
-
+USER_FAKE_EMAIL = "test@gmail.com"
+USER_FAKE_PASS = "123456"
 
 @pytest.fixture(scope="session")
-def client(test_db_init):
+def client():
     return TestClient(app)
-
 
 @pytest.fixture(scope="session")
 def get_token(client):

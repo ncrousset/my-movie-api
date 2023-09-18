@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from config.database import Base
 
 movies_categories = Table(
-    'movies_categories',
+    'movies_has_categories',
     Base.metadata,
     Column('movie_id', Integer, ForeignKey('movies.id'), primary_key=True),
     Column('category_id', Integer, ForeignKey('categories.id'), primary_key=True)
@@ -14,7 +14,7 @@ class Movie(Base):
     __tablename__ = 'movies'
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(100), nullable=False)
+    title = Column(String(100), nullable=False, unique=True)
     obi = Column(String(500))
     director = Column(String(200))
     year = Column(Integer, nullable=False)
@@ -31,7 +31,7 @@ class Category(Base):
     __tablename__ = 'categories'
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False, unique=True)
 
     movies = relationship("Movie", secondary=movies_categories,
                           back_populates="categories")

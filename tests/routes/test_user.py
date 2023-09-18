@@ -1,4 +1,4 @@
-from tests.test_main import test_db_init, client, get_token, USER_FAKE_EMAIL
+from tests.test_main import client, get_token, USER_FAKE_EMAIL
 from faker import Faker
 
 fake = Faker()
@@ -66,7 +66,7 @@ def test_register_user_invalid_email(client):
 
     assert response.status_code == 422
 
-def test_register_user_already_exists(client, test_db_init):
+def test_register_user_already_exists(client):
     data = {
         "name": "Test",
         "email": USER_FAKE_EMAIL,

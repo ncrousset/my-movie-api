@@ -14,7 +14,7 @@ def login(user: User.Auth):
     db_user = UserService(db).get_user_by_email(user.email)
 
     if not db_user:
-        return JSONResponse(status_code=404, content={"message": "User not found"})
+        return JSONResponse(status_code=401, content={"message": "User not found"})
 
     if db_user.password == user.password:
         token = create_token(vars(user))
