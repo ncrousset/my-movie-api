@@ -56,7 +56,7 @@ class MovieService():
         if not result:
             return None
         result.title = movie.title
-        result.obi = movie.obi
+        result.summary = movie.summary
         result.director = movie.director
         result.year = movie.year
         result.imdb_rating = movie.imdb_rating

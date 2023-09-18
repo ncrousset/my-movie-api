@@ -15,7 +15,7 @@ class Movie(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(100), nullable=False, unique=True)
-    obi = Column(String(500))
+    summary = Column(String(500))
     director = Column(String(200))
     year = Column(Integer, nullable=False)
     imdb_rating = Column(Float)
