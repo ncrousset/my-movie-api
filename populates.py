@@ -38,5 +38,6 @@ def run():
         session.add_all(categories_movies + [user])
         session.commit()
 
+
 if __name__ == "__populates__":
     run()

@@ -46,8 +46,8 @@ def update_movie(movie_id: int, movie: Movie) -> Movie:
     result = MovieService(db).update_movie(movie_id, movie)
     return JSONResponse(status_code=200, content=jsonable_encoder(result))
 
-@router.delete("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200, dependencies=[Depends(JWTBearer())])
-def delete_movie(movie_id: int) -> Movie:
-    db = Session()
-    result = MovieService(db).delete_movie(movie_id)
-    return JSONResponse(status_code=200, content=jsonable_encoder(result))
+# @router.delete("/movie/{movie_id}", tags=["movies"], response_model=Movie, status_code=200, dependencies=[Depends(JWTBearer())])
+# def delete_movie(movie_id: int) -> Movie:
+#     db = Session()
+#     result = MovieService(db).delete_movie(movie_id)
+#     return JSONResponse(status_code=200, content=jsonable_encoder(result))
