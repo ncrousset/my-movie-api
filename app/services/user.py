@@ -1,4 +1,6 @@
 from app.models.user import User as UserModel
+from app.utils.error import UserAlreadyExistsError, \
+                            UserNotFoundError, UserNotFoundErrorByEmail
 
 class UserService():
     def __init__(self, db) -> None:
@@ -10,16 +12,24 @@ class UserService():
 
     def get_user_by_id(self, id):
         result = self.db.query(UserModel).filter(UserModel.id == id).first()
+        if not result:
+            raise UserNotFoundError(id)
+
         return result
     
     def get_user_by_email(self, email):
         result = self.db.query(UserModel).filter(UserModel.email == email).first()
+        if not result:
+            raise UserNotFoundErrorByEmail(email)
+
         return result
     
     def register_user(self, user):
-        result = self.get_user_by_email(user.email)
+        result = self.db.query(UserModel)\
+                        .filter(UserModel.email == user.email).first()
+
         if result:
-            return None
+            raise UserAlreadyExistsError(user.email)
 
         try:
             new_user = UserModel(**vars(user))
@@ -32,9 +42,31 @@ class UserService():
 
     def update_user(self, id, user):
         result = self.db.query(UserModel).filter(UserModel.id == id).first()
+        
         if not result:
-            return None
+            return UserNotFoundError(id)
+
         result.email = user.email
         result.password = user.password
+        self.db.commit()
+        return result
+    
+    def desactivate_user(self, id):
+        result = self.db.query(UserModel).filter(UserModel.id == id).first()
+        
+        if not result:
+            return UserNotFoundError(id)
+
+        result.active = False
+        self.db.commit()
+        return result
+    
+    def activate_user(self, id):
+        result = self.db.query(UserModel).filter(UserModel.id == id).first()
+        
+        if not result:
+            return UserNotFoundError(id)
+
+        result.active = True
         self.db.commit()
         return result

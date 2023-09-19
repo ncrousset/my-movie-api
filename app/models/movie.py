@@ -19,7 +19,7 @@ class Movie(Base):
                               back_populates="movies")
     
     users_favorite = relationship("User", secondary=user_favorite_movies,
-                                    back_populates="movies_facorite")
+                                    back_populates="movies_favorite")
 
     def __repr__(self):
         return f"<Movie {self.title}>"

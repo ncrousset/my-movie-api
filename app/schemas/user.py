@@ -1,5 +1,9 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
+from typing import List, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .movie import Movie
 
 class User(BaseModel):
     name: str
@@ -7,6 +11,7 @@ class User(BaseModel):
     password: str
     created_at: datetime = datetime.now()
     active: bool = True
+    
 
     class Config:
         json_schema_extra = {
@@ -30,3 +35,4 @@ class User(BaseModel):
                     "email": "ncrousset926@gmail.com",
                 }
             }
+            

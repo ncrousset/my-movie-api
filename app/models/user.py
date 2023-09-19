@@ -14,7 +14,7 @@ class User(Base):
     created_at = Column(DateTime(True), default=datetime.now())
     active = Column(Boolean, default=True)
     
-    movies_facorite = relationship("Movie", secondary=user_favorite_movies,
+    movies_favorite = relationship("Movie", secondary=user_favorite_movies,
                                       back_populates="users_favorite")
 
     def __str__(self):

@@ -1,4 +1,6 @@
 from tests.test_main import client, USER_FAKE_EMAIL, USER_FAKE_PASS
+
+
 def test_auth_login(client):
     headers = {'Content-Type': 'application/json'}
     response = client.post(
@@ -18,8 +20,8 @@ def test_auth_login_invalid_credentials(client):
         headers=headers
     )
 
-    assert response.status_code == 401
-    assert response.json()["message"] == "User not found"
+    assert response.status_code == 404
+    assert response.json()["message"] == "The user with email 'tito@macana.com' was not found."
 
 
 def test_auth_login_invalid_password(client):

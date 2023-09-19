@@ -7,6 +7,8 @@ from app.utils.jwt_manager import create_token
 # add user and son information need to run this test
 import populates
 
+populates.run()
+
 USER_FAKE_EMAIL = "test@gmail.com"
 USER_FAKE_PASS = "123456"
 

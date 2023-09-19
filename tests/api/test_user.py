@@ -30,7 +30,7 @@ def test_get_user_not_found(client, get_token):
     )
 
     assert response.status_code == 404
-    assert response.json()["message"] == "User not found"
+    assert response.json()["message"] == f"The user with id '3000' was not found."
 
 def test_register_user(client):
     headers = {'Content-Type': 'application/json'}
@@ -81,4 +81,4 @@ def test_register_user_already_exists(client):
     )
 
     assert response.status_code == 400
-    assert response.json()["message"] == "User already exists"
+    assert response.json()["message"] == f"The email 'test@gmail.com' is already in use."
