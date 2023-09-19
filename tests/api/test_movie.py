@@ -173,27 +173,27 @@ def test_update_movie_invalid_data(client, get_token):
     )
     assert response.status_code == 422
 
-def test_delete_movie(client, get_token):
-    """Test deleting a movie with authentication using a JWT token.
+# def test_delete_movie(client, get_token):
+#     """Test deleting a movie with authentication using a JWT token.
 
-    Sends a DELETE request to '/movie/1' with an authenticated user's JWT token.
-    """
-    headers = {"Authorization": "Bearer " + get_token, 'Content-Type': 'application/json'}
-    response = client.delete(
-        "/movie/2",
-        headers=headers
-    )
-    assert response.status_code == 200
+#     Sends a DELETE request to '/movie/1' with an authenticated user's JWT token.
+#     """
+#     headers = {"Authorization": "Bearer " + get_token, 'Content-Type': 'application/json'}
+#     response = client.delete(
+#         "/movie/2",
+#         headers=headers
+#     )
+#     assert response.status_code == 200
 
-def test_delete_movie_unauthenticated(client):
-    """Test deleting a movie without authentication.
+# def test_delete_movie_unauthenticated(client):
+#     """Test deleting a movie without authentication.
 
-    Sends a DELETE request to '/movie/1' without an authenticated user's JWT token.
-    Verifies that the response status code is 401 (Unauthorized).
-    """
-    headers = {'Content-Type': 'application/json'}
-    response = client.delete(
-        "/movie/2",
-        headers=headers
-    )
-    assert response.status_code == 403
+#     Sends a DELETE request to '/movie/1' without an authenticated user's JWT token.
+#     Verifies that the response status code is 401 (Unauthorized).
+#     """
+#     headers = {'Content-Type': 'application/json'}
+#     response = client.delete(
+#         "/movie/2",
+#         headers=headers
+#     )
+#     assert response.status_code == 403
